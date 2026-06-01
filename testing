@@ -1,1 +1,21 @@
+$( document ).ready(function() {
+    $('.SaveAll').click(function(){
+        SaveAllSection($(this).attr('data-section'),true,$(this));
+    });
+});
+
+function SaveAllSection(section,clicked,that) {
+    if($('.SaveTable').length > 0) {
+        $('.SaveTable').click();
+    }
+    $('#'+section+' .panel-default.active a[data-toggle="collapse"]:not(.collapsed)').click();
+    Save_and_continue(section);
+    $('#'+section+' > .panel.panel-default').addClass('panel-success');
+    
+    // unvalidate on saveAll
+    if(clicked && that[0].dataset.unvalidation == 'true' ){
+        e = $(that).closest('[data-validationid]').attr('id')
+        unvalidate(e)
+    }
+}
 
