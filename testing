@@ -19,3 +19,36 @@ function SaveAllSection(section,clicked,that) {
     }
 }
 
+
+--------------------------------------------------------------
+this is using Saveall, explain how saveall can be used here
+
+{% assign panel_group_id = "DocumentsAccordion" %}
+{% capture requiredDocuments %}
+    {% include 'Template - Documents' id:'cdm_apps-kml_list', title:{{snippets['HICC/App/Documents/KMLfile']}}, fieldInstruction:{{snippets['HICC/App/Documents/KMLfile/Instructions']}}, can_download:true, bind_field:'cdm_regardingid_cdm_app', bind_id:cdm_apps.id, bind_table:'cdm_app', file_type_id:'dfccdce6-9444-f111-bec6-7c1e520625f7', is_modal:false, limit:1 %}
+    <hr aria-hidden="true" />
+
+    {% comment %} We assign a different fileattachment type if the applition' orgazination type is "For Profit Private Sector" {% endcomment %}
+    {% assign appOrgType = cdm_apps.cdm_ultimaterecipientorganizationtypeid.id %}
+    {% if appOrgType == '628ea2c0-f56b-ef11-a670-7c1e52409116' or appOrgType == '628ea2c0-f56b-ef11-a670-7c1e5240912a' %}
+        {% assign losFileType = 'd56fb61e-7349-f111-bec7-7c1e52062d43' %}
+    {% else %}
+        {% assign losFileType = '5dae47c2-9544-f111-bec7-7c1e5206267d' %}
+    {% endif %}    
+    
+    {% include 'Template - Documents' id:'cdm_apps-letterofsupport_list', title:{{snippets['HICC/App/Documents/LetterOfSupport']}}, fieldInstruction:{{snippets['HICC/App/Documents/LetterOfSupport/Instructions']}}, can_download:true, bind_field:'cdm_regardingid_cdm_app', bind_id:cdm_apps.id, bind_table:'cdm_app', file_type_id:losFileType, is_modal:false, limit:1 %}
+    <hr aria-hidden="true" />
+    {% include 'Template - Documents' id:'cdm_apps-additionaldoc', title:{{snippets['HICC/App/Documents/AdditionalDoc']}}, fieldInstruction:{{snippets['HICC/App/Documents/AdditionalDoc/Instructions']}}, can_upload:true, can_download:true, can_delete:true, bind_field:'cdm_regardingid_cdm_app', bind_id:cdm_apps.id, bind_table:'cdm_app', file_type_id:'b47f310d-9644-f111-bec7-7c1e52062d43', is_modal:false %}
+    <hr aria-hidden="true" />
+    {% include 'Template - Text_area' maxlength:'10000', CrmFieldSchema:'cdm_apps-cdm_additionalcomments', CrmFieldValue:{{cdm_apps.cdm_additionalcomments}}, label:{{snippets['HICC/App/Documents/AdditionalComments']}}, fieldInstruction:{{snippets['HICC/App/Documents/AdditionalCommentsInstructions']}} %}
+{% endcapture %}
+
+<div class="panel-group" id={{panel_group_id}} data-parent="#{{data_parent}}" data-target="#{{data_target}}" >
+    {% comment %} Error Container {% endcomment %}
+    {{snippets['HICC/General/ErrorSummary']}}
+
+    {% include 'Template - Collapsible_Panel' content:requiredDocuments, name:'DocumentsCollapse', title:{{snippets['HICC/App/Documents/Tab']}}, parent:panel_group_id, first:true %}
+
+    <!-- Save all -->
+    {% include 'Template - Save_all' Section:panel_group_id%}
+</div>
