@@ -1,1 +1,19 @@
-
+{% if editable %}
+<div class="form-group cell" style=" padding: 28px 5px 0px;">
+    {% unless novalidate %}
+    {% if documentBasedIntake %}
+        {% include 'Template - Caption' AlertType:'info', Content:{{snippets['NNN/App/Validation/ClickValidateCompleteDocuments']}} %}
+    {% else %}
+        {% include 'Template - Caption' AlertType:'info', Content:{{snippets['NNN/App/Validation/ClickValidateCompleteSections']}} %}
+    {% endif %}
+    {% endunless %}
+    <div class="input-group">
+        {% unless novalidate %}
+            <button data-section="{{Section}}" data-unvalidation="true" type="button" class="btn btn-primary {% if pcf %}pcfValidation{%else%}validation{%endif%}">{{snippets['NNN/Button/Validate'] | espace}}</button>
+        {% endunless %}
+        {% unless nosave %}
+            <button data-section="{{Section}}" data-unvalidation="false" type="button" class="btn btn-primary {% if pcf %}pcfSaveAll{%else%}SaveAll{%endif%} mrgn-lft-sm"><span class="fa fa-save"></span> {{snippets['NNN/Button/SaveAll'] | espace}}</button>
+        {% endunless %}
+    </div>
+ </div>
+ {%endif%}
