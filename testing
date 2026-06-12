@@ -1,1 +1,60 @@
 
+<div class="section-panel">
+    <div class="section-panel-heading">
+        {{ snippets['infc.portal.required.supporting.documents.lbl'] }}
+    </div>
+
+    <div class="section-panel-body">
+        <label for="" class="control-panel ChooseFile" for="uploadedDocumentsTable"><span>{{ snippets['infc.portal.required.supporting.documents.lbl'] }}</span></label>
+        <p class="fieldInstruction" style="font-size: 12px;">
+            {% if isIntake %}
+                {{ snippets['infc.portal.file.upload.instructions.net.intake'] }}
+            {% else %}
+                {{ snippets['infc.portal.file.upload.instructions.pdr'] }}
+            {% endif %}
+        </p>
+
+        <div class="uploadField">
+            <input type="file"
+                id="file-upload"
+                class="{%if required %}validate{%endif%}{%if isIntake %}intake{%else%}pdr{%endif%}"
+                style="display: none;">
+            
+                <button type="button" id="file-upload-button" style="margin-right: 3px">Test</button>
+                <span id="file-upload-text">Test testing</span>
+                <table id="uploadedDocumentsTable" style="margin-top:30px" class="table table-hover table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>{{ snippets['infc.portal.name.of.document'] }}</th>
+                            <th style="width: 13%"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        const lang = $('html').data('lang');
+        const chooseFile = lang == 'en' ? "Choose File" : "Choisir un fichier";
+        const noFileSelected = lang == 'en' ? "No File Chosen" : "Aucun fichier choisi";
+        const _fileUploadBtn = $("#file-upload-button");
+        const _fileUploadText = $("#file-upload-text");
+
+        _fileUploadBtn.text(chooseFile);
+        _fileUploadText.text(noFileSelected);
+
+        _fileUploadBtn.on("click", function() {
+            $("#file-upload").click();
+        });
+
+        $("#file-upload").on("change", function() {
+            let fileName = $(this).val().split("\\").pop();
+           _fileUploadText .text(fileName ? fileName : noFileSelected);
+
+
+        });
+    });
+</script>
