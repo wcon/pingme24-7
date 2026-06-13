@@ -1,1 +1,25 @@
 
+<div class="form-group cell{% if Hide %} hide-content{% endif %}">
+    {% if fieldInstruction %}
+        <label class="control-label checkbox-label{% if required %} required{% endif %}" style="display:inline;" for="{{CrmFieldSchema}}">{{field_title}}{% if required %} {{snippets['HICC/Field/Required']}}{% endif %}</label>
+        <p class="fieldInstruction">{{fieldInstruction}}</p>
+    {% endif %}
+    {% if CrmFieldValue == "true" %}
+        {% if disabled %}
+            <label class="control-label checkbox-label{% if required %} required {% endif %}{% if excludeSave %} excludeSave {%endif%}" style="display:inline;" for="{{CrmFieldSchema}}">{{label}}{% if ToolTip == "Yes" %} <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="{{title}}"></span>{% endif %}{% if required %} {{snippets['HICC/Field/Required']}}{% endif %}</label>
+            <p class="mrgn-lft-sm {{customClass}}" id="{{CrmFieldSchema}}">{{snippets['HICC/General/Yes']}}</p>
+        {% else %}
+            <input type="checkbox" class="{% if required %}validate {% endif %}{{customClass}}" title="{{title}}" Name="{{CrmFieldSchema}}" value="{{CrmFieldValue}}" checked id="{{CrmFieldSchema}}">
+        {% endif %}
+    {% else %}
+        {% if disabled %}
+            <label class="control-label checkbox-label{% if required %} required{% endif %}" style="display:inline;" for="{{CrmFieldSchema}}">{{label}}{% if ToolTip == "Yes" %} <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="{{title}}"></span>{% endif %}{% if required %} {{snippets['HICC/Field/Required']}}{% endif %}</label>
+            <p class="mrgn-lft-sm {{customClass}}" id="{{CrmFieldSchema}}">{{snippets['HICC/General/No']}}</p>
+        {% else %}
+            <input type="checkbox" class="{% if required %}validate {% endif %}{{customClass}} {% if excludeSave %} excludeSave {%endif%}" title="{{title}}" Name="{{CrmFieldSchema}}" value="" id="{{CrmFieldSchema}}">
+        {% endif %}
+    {% endif %}
+    {% unless disabled %}
+        <label class="control-label checkbox-label{% if required %} required{% endif %}" style="display:inline;" for="{{CrmFieldSchema}}">{{label}}{% if ToolTip == "Yes" %} <span class="glyphicon glyphicon-info-sign" data-toggle="tooltip" data-placement="bottom" title="{{title}}"></span>{% endif %}{% if required %} {{snippets['HICC/Field/Required']}}{% endif %}</label>
+    {% endunless %}
+</div>
