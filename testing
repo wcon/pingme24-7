@@ -1,1 +1,20 @@
 
+{% extends 'GCIMS - Portal Master Template' %}
+
+{% block init %}
+
+  {% assign intake = entities['cdm_appintake'][request.params.intakeid] %}
+  {% if website.selected_language.name == "English" %}
+      {% assign intakeName = intake.cdm_nameenglish %}
+  {% else %}
+      {% assign intakeName = intake.cdm_namefrench %}
+  {% endif %}
+
+  {% assign title = intakeName %}
+  {% assign welcomemessage = '' %}
+  {% assign mainAdditionalCssClasses = '' %}
+{% endblock %}
+
+{%block content%}
+ {{ page.adx_copy | liquid }}
+{%endblock%}
