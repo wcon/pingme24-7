@@ -1,1 +1,46 @@
+{% comment %}
+ Parameters:
+  - ModalId*: string, the id of the modal to open (e.g., 'cdm_addresses')
+  - ModalTitle*: string, the title of the modal (e.g., 'Add Contact')
+  - ModalContent*: capture type, content in the panel. (The capture needs to be defined above the include of this template)
+  - tableEntity: string, name of the entity that the modal will create a record for (e.g., 'cdm_addresses'). Mandatory if not linked through Template - Table
+  - TableId: string, the id of the table that the modal will bind to in case multiple modals save to the same entity on the same page (e.g., 'cdm_addresses_remittance'). If only one entity put the same as tableEntity. (e.g., 'cdm_addresses'). Mandatory if not linked through Template - Table
+  - AddButtonText: string, the text to display on the add button (e.g., 'Add Contact'), only needed if there is an add button to trigger the modal
+{% endcomment %}
+ 
+{% if editable%}
+{%if AddButtonText %}
+<div class="form-group cell pull-right">
+  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#{{ModalId}}_modal" data-tablekey="{{TableId}}" data-entity="{{tableEntity}}"><span class="fa fa-plus"></span> {{AddButtonText}}</button>
+</div>
+{%endif%}
 
+<div class="modal fade" id="{{ModalId}}_modal" role="dialog"  data-entity="{{tableEntity}}" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+    <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" onclick="clear_all_fields('{{ModalId}}_modal');"><i class="fa fa-times" style="color:white"></i></button>
+          <h4 class="modal-title">{{ModalTitle}}</h4>
+        </div>
+        <div class="modal-body modal-body-custom" id="{{ModalId}}" data-rowid="" data-tablekey="{{TableId}}" data-entity="{{tableEntity}}" autocomplete="off">
+            {{snippets['HICC/General/ErrorSummary']}}
+            {%if type == "Address" %}
+              {% include 'Template - Input_field', title: snippets['HICC/Address/StreetName'], maxlength:'250', Type:'text', CrmFieldSchema:'cdm_addresses-cdm_line1' , label:snippets['HICC/Address/StreetName'], required:true %}
+              {% include 'Template - City_Lookup', datatype:'infc_cities', databind:'true', CrmFieldSchema:'cdm_addresses-cdm_cityid', label:snippets['HICC/Address/CityTown'], required:true %}
+              {% include 'Template - Province_Lookup', datatype:'infc_provinces', databind:'true', CrmFieldSchema:'cdm_addresses-cdm_provinceid', label:snippets['HICC/Address/ProvinceTerritory'], required:true %}
+              {% include 'Template - Input_field', title: snippets['HICC/Address/PostalCode'] , maxlength:'6', Type:'text', CrmFieldSchema:'cdm_addresses-cdm_postalcode', label:snippets['HICC/Address/PostalCode'], required:true %}
+            {%else%}
+            {{ModalContent}}
+            {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" onclick='save_modal()' class="btn btn-primary" >{{snippets['HICC/Button/Save']}}</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal" onclick="clear_all_fields('{{ModalId}}');">{{snippets['HICC/Button/Cancel']}}</button>         
+        </div>
+      </div>
+    </div>
+</div>
+{%endif%}
+
+{% assign type = nil %}
